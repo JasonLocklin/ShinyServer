@@ -47,3 +47,27 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Environment files
+.env
+
+# Logs
+shiny-logs/
+
+# Docker volumes (if using local bind mounts)
+postgres_data/
+
+# Mac
+.DS_Store
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# R files
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
