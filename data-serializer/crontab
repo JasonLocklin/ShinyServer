@@ -1,0 +1,3 @@
+*/10 * * * * /usr/local/bin/dump_to_parquet.R >> /var/log/data-serializer.log 2>&1
+# This empty line is crucial for cron to read the last line
+

@@ -1,3 +1,4 @@
+
 services:
   postgresql:
     image: postgres:15-alpine
@@ -15,6 +16,7 @@ services:
 
   shiny_server:
     build:
+      context: ./shiny-server
       dockerfile: Dockerfile
     restart: unless-stopped
     volumes:
@@ -23,8 +25,25 @@ services:
       - postgresql
     env_file:
       - .env
+    environment:
+      SURVERYDOWN_GIT_URL: https://github.com/surveydown-dev/templates.git
     ports:
       - "3838:3838" # use http://localhost:3838 locally for testing
+    networks:
+      - shiny_network
+
+  data_serializer:
+    build:
+      context: ./data-serializer
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data_dumps:/app/data_dumps # Mount a volume for output files
+      - ./data-serializer-logs:/var/log/ # For cron job logs
+    depends_on:
+      - postgresql
     networks:
       - shiny_network
 
@@ -38,6 +57,7 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
+      - ./data_dumps:/var/www/data_dumps 
     depends_on:
       - shiny_server
     networks:
