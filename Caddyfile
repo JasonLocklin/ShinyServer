@@ -1,7 +1,7 @@
 # Minimal example of a caddy file that serves both a domain
 
 # IMPORTANT: by default, data can be downloaded from the
-# /data-downloads path with the username "data" and password
+# /data-export path with the username "data" and password
 # "defaultpassword". Change this before you allow any
 # non-demonstration data collection!
 
@@ -41,14 +41,14 @@ shiny.locklin.science {
     # You can generate a hash using `caddy hash-password --plaintext your_password_here`
     # or use `docker run --rm caddy caddy hash-password --plaintext your_password_here`
     @data_dumps_path {
-        path /data-downloads/*
+        path /data-export/*
     }
     handle @data_dumps_path {
-        basicauth /data-downloads/* {
+        basicauth /data-export/* {
             data $2a$14$.pz9aVYKXX2bdqtIzRINJOTSacvgAsbL6HMLt2Q/bdBTH3UdBfJIO # For demonstrating, this is user "data" and password "defaultpassword" REPLACE THIS!
         }
         file_server {
-            root /var/www/data_dumps
+            root /var/www/data-export
             browse
         }
     }

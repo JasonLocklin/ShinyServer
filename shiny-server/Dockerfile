@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     git \
     wget \
+    postgresql-client \
+    cron \
     gdebi-core \
     && rm -rf /var/lib/apt/lists/*
 
@@ -20,7 +22,7 @@ RUN apt-get update && apt-get install -y \
 # `DBI`: Database interface for R.
 # `RPostgres`: PostgreSQL client for R, often used with DBI.
 # `quarto`: For dynamic reporting and document generation.
-RUN R -e "install.packages(c('surveydown', 'DBI', 'RPostgres', 'quarto'), repos='https://cran.rstudio.com/')"
+RUN R -e "install.packages(c('surveydown', 'DBI', 'RPostgres', 'quarto', 'arrow'), repos='https://cran.rstudio.com/')"
 
 # Install Quarto CLI.
 # Define the Quarto version and construct the download URL.
@@ -49,9 +51,26 @@ RUN git clone ${SURVERYDOWN_GIT_URL} /srv/shiny-server/surveydown
 # This ensures that the Shiny server has the necessary permissions to read and write files.
 RUN chown -R shiny:shiny /srv/shiny-server/
 
+# Set up survey data serialization to files
+# Copy the dumping script
+COPY dump_to_parquet.R /usr/local/bin/dump_to_parquet.R
+RUN chmod +x /usr/local/bin/dump_to_parquet.R
+
+# Set up cron job
+COPY crontab /etc/cron.d/data-serializer-cron
+RUN chmod 0644 /etc/cron.d/data-serializer-cron \
+    && crontab /etc/cron.d/data-serializer-cron
+
+# Create a directory for the output files
+RUN mkdir -p /app/data_dumps
+
 # Expose port 3838, the default port for Shiny Server.
 EXPOSE 3838
 
-# Define the command to run when the container starts.
-# This starts the Shiny server.
-CMD ["/usr/bin/shiny-server"]
+# Copy the entrypoint script into the container
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+# Make the entrypoint script executable
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Set the entrypoint for the container
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

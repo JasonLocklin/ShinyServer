@@ -1,5 +1,5 @@
-
 services:
+  # Locally hosted database
   postgresql:
     image: postgres:15-alpine
     restart: unless-stopped
@@ -14,39 +14,31 @@ services:
     networks:
       - shiny_network
 
+  # The Shiny Server
   shiny_server:
     build:
       context: ./shiny-server
       dockerfile: Dockerfile
     restart: unless-stopped
     volumes:
-      - ./shiny-logs:/var/log/shiny-server/
+      - ./shiny-logs:/var/log/shiny-server/ #Shiny errors
+      - ./data-export:/app/data_dumps # Survey data ends up here
+      - ./data-serializer-logs:/var/log/ # For cron job logs
     depends_on:
       - postgresql
     env_file:
       - .env
     environment:
-      SURVERYDOWN_GIT_URL: https://github.com/surveydown-dev/templates.git
+      SURVERYDOWN_GIT_URL: "https://github.com/surveydown-dev/templates.git"
     ports:
       - "3838:3838" # use http://localhost:3838 locally for testing
     networks:
       - shiny_network
 
-  data_serializer:
-    build:
-      context: ./data-serializer
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - ./data_dumps:/app/data_dumps # Mount a volume for output files
-      - ./data-serializer-logs:/var/log/ # For cron job logs
-    depends_on:
-      - postgresql
-    networks:
-      - shiny_network
-
+  # Web Server
+  # This is the container existing mainly for demonstration purposes
+  # Your IT or Web people will likely swap this for their own
+  # web servers, with their regular firewall/SSO/authentication/etc.
   caddy:
     image: caddy:latest
     restart: unless-stopped
@@ -57,12 +49,14 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
-      - ./data_dumps:/var/www/data_dumps 
+      - ./data-export:/var/www/data-export 
     depends_on:
       - shiny_server
     networks:
       - shiny_network
 
+
+# Data volumes temporary data is stored between restarts
 volumes:
   postgres_data:
   caddy_data:
