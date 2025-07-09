@@ -1,6 +1,7 @@
+# Minimal example of a caddy file that serves both a domain
 
-# Production configuration
-# -- Change this to your domain!
+
+# Be sure to Change this to your domain!
 shiny.locklin.science {
     reverse_proxy shiny:3838 {
         header_up Host {host}
@@ -28,26 +29,5 @@ shiny.locklin.science {
     log {
         output file /var/log/caddy/access.log
         format json
-    }
-}
-
-# Local development configuration
-localhost {
-    reverse_proxy shiny:3838 {
-        header_up Host {host}
-        header_up X-Real-IP {remote}
-        header_up X-Forwarded-For {remote}
-        header_up X-Forwarded-Proto {scheme}
-    }
-    
-    # Less strict headers for development
-    header {
-        X-Content-Type-Options "nosniff"
-    }
-    
-    # Logging for development
-    log {
-        output stdout
-        format console
     }
 }

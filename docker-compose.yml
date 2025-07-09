@@ -1,42 +1,35 @@
-version: '3.8'
-
 services:
   postgresql:
     image: postgres:15-alpine
-    container_name: shiny_postgres
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${SD_DBNAME}
+      POSTGRES_USER: ${SD_USER}
+      POSTGRES_PASSWORD: ${SD_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - shiny_network
 
-  shiny:
+  shiny_server:
     build:
-      context: ./shiny-apps
       dockerfile: Dockerfile
-    container_name: shiny_server
     restart: unless-stopped
     volumes:
-      - ./shiny-apps:/srv/shiny-server/
       - ./shiny-logs:/var/log/shiny-server/
     depends_on:
       - postgresql
     env_file:
       - .env
-    environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgresql:5432/${POSTGRES_DB}
+    ports:
+      - "3838:3838" # use http://localhost:3838 locally for testing
     networks:
       - shiny_network
 
   caddy:
     image: caddy:latest
-    container_name: shiny_caddy
     restart: unless-stopped
     ports:
       - "80:80"
@@ -46,7 +39,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - shiny
+      - shiny_server
     networks:
       - shiny_network
 
