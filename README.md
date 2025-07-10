@@ -1,6 +1,8 @@
 # Demonstration of Self-Hosted SurveyDown Deployment with Docker Compose
 
-This project provides a minimal working example of self-hosting `surveydown` surveys with a self-hosted PostgreSQL database, all orchestrated with Docker Compose. It is designed for demonstration purposes, local development, and as a starting point for understanding how such a system can be deployed. **It should be used with appropriate security measures if adapting for production environments.**
+This project provides a minimal working example of self-hosting `surveydown` surveys with a self-hosted PostgreSQL database, all orchestrated with Docker Compose. It is designed to be as simple as possible to understand and use for demonstration purposes, local development, and as a starting point for understanding how such a system can be deployed. **It should be used with appropriate security measures if adapting for production environments.**
+
+For more featureful deployment of shiny apps, including surveydown, consider [Shinyproxy](https://www.shinyproxy.io/) and simmilar projects. 
 
 ## Overview
 
@@ -72,7 +74,10 @@ Several files need to be configured for your specific environment.
         ```
       * **Note:** `SD_HOST` is set to `postgresql` because that's the service name of the PostgreSQL container within the Docker network. `SD_PORT` for the application to connect to is the default PostgreSQL port `5432`.
 
-2.  **Update `Caddyfile`:**
+2. **Set your Survey Location**
+      * In docker-compose.yml, change the line starting with `SURVERYDOWN_GIT_URL:` to point to the git repository of your survey. Every time the containers build, it will pull in the most recent version of your survey.
+
+3.  **Update `Caddyfile`:**
 
       * Open `Caddyfile`.
       * **Change your domain:** Replace `shiny.locklin.science` with your actual domain name. Caddy will automatically obtain SSL certificates for this domain. If you are just testing locally, you can connect to the shiny server directly at (http://localhost:3838).
@@ -110,7 +115,8 @@ The first time you run this, it will download base images and build your custom 
 
 ## Accessing the Application
 
-  * **Shiny Survey:** Once deployed, your `surveydown` application should be accessible via HTTPS at the domain you configured in your `Caddyfile` (e.g., `https://yourdomain.com`).
+  * **Shiny Survey:** Once deployed, your `surveydown` application should be accessible via HTTPS at the domain you configured in your `Caddyfile` (e.g., `https://yourdomain.com/survey`).
+  * The standard shiny landing page is currently available at `https://yourdomain.com` and the surveydown templates are available at `https://yourdomain.com/templates`
   * **Data Downloads:** The generated Parquet files can be accessed at `https://yourdomain.com/data-downloads/`. You will be prompted for the username and password configured in your `Caddyfile`.
 
 ## Data Management
