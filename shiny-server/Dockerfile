@@ -61,8 +61,7 @@ RUN chmod +x /usr/local/bin/dump_to_parquet.R
 
 # Set up cron job
 COPY crontab /etc/cron.d/data-serializer-cron
-RUN chmod 0644 /etc/cron.d/data-serializer-cron \
-    && crontab /etc/cron.d/data-serializer-cron
+RUN chmod 0644 /etc/cron.d/data-serializer-cron
 
 # Create a directory for the output files
 RUN mkdir -p /app/data_dumps
