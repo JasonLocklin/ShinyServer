@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
 # `DBI`: Database interface for R.
 # `RPostgres`: PostgreSQL client for R, often used with DBI.
 # `quarto`: For dynamic reporting and document generation.
-RUN R -e "install.packages(c('DBI', 'RPostgres', 'quarto', 'arrow', 'pak'), repos='https://cran.rstudio.com/')"
+RUN R -e "install.packages(c('leaflet', 'here', 'DBI', 'RPostgres', 'quarto', 'arrow', 'pak'), repos='https://cran.rstudio.com/')"
 
 RUN R -e "pak::pak('surveydown-dev/surveydown')"
 
@@ -60,10 +60,9 @@ COPY dump_to_parquet.R /usr/local/bin/dump_to_parquet.R
 RUN chmod +x /usr/local/bin/dump_to_parquet.R
 
 # Set up cron job
-COPY crontab /home/shiny/data-serializer-cron
-RUN chown shiny:shiny /home/shiny/data-serializer-cron
-RUN chmod 0644 /home/shiny/data-serializer-cron \
-    && crontab /home/shiny/data-serializer-cron
+COPY crontab /etc/cron.d/data-serializer-cron
+RUN chmod 0644 /etc/cron.d/data-serializer-cron \
+    && crontab /etc/cron.d/data-serializer-cron
 
 # Create a directory for the output files
 RUN mkdir -p /app/data_dumps
@@ -75,8 +74,6 @@ EXPOSE 3838
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 # Make the entrypoint script executable
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-USER shiny
 
 # Set the entrypoint for the container
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
