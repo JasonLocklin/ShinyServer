@@ -9,7 +9,7 @@
 
 # Be sure to Change this to your domain!
 shiny.locklin.science {
-    reverse_proxy shiny:3838 {
+    reverse_proxy shiny_server:3838 {
         header_up Host {host}
         header_up X-Real-IP {remote}
         header_up X-Forwarded-For {remote}
