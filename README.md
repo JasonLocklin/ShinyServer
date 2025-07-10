@@ -1,4 +1,4 @@
-# Self-Hosted SurveyDown Deployment with Docker Compose
+# Demonstration of Self-Hosted SurveyDown Deployment with Docker Compose
 
 This project provides a minimal working example of self-hosting `surveydown` surveys with a self-hosted PostgreSQL database, all orchestrated with Docker Compose. It is designed for demonstration purposes, local development, and as a starting point for understanding how such a system can be deployed. **It should be used with appropriate security measures if adapting for production environments.**
 
