@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
 # `DBI`: Database interface for R.
 # `RPostgres`: PostgreSQL client for R, often used with DBI.
 # `quarto`: For dynamic reporting and document generation.
-RUN R -e "install.packages(c('leaflet', 'here', 'DBI', 'RPostgres', 'quarto', 'arrow', 'pak'), repos='https://cran.rstudio.com/')"
+RUN R -e "install.packages(c('rmarkdown', 'leaflet', 'here', 'DBI', 'RPostgres', 'quarto', 'arrow', 'pak'), repos='https://cran.rstudio.com/')"
 
 # Installing development version of Shinydown (can be added above for stable version instead)
 RUN R -e "pak::pak('surveydown-dev/surveydown')"
