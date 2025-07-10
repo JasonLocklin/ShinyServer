@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
 # `quarto`: For dynamic reporting and document generation.
 RUN R -e "install.packages(c('leaflet', 'here', 'DBI', 'RPostgres', 'quarto', 'arrow', 'pak'), repos='https://cran.rstudio.com/')"
 
+# Installing development version of Shinydown (can be added above for stable version instead)
 RUN R -e "pak::pak('surveydown-dev/surveydown')"
 
 # Install Quarto CLI.
@@ -50,6 +51,7 @@ ARG SURVERYDOWN_GIT_URL=https://github.com/JasonLocklin/surveydown-templates.git
 RUN git clone ${SURVERYDOWN_GIT_URL} /srv/shiny-server/survey
 
 # Include a copy of the surveydown templates for troubleshooting/demonstrating
+# Note: this is identical to the upstream templates, except set to connect to the database
 RUN git clone https://github.com/JasonLocklin/surveydown-templates.git /srv/shiny-server/templates
 
 # Set appropriate ownership for the /srv/shiny-server directory to the 'shiny' user.
