@@ -1,6 +1,5 @@
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-*/10 * * * * nice -n 19 ionice /usr/local/bin/Rscript /usr/local/bin/dump_to_parquet.R >> /var/log/data-serializer.log 2>&1
-#*/10 * * * * shiny /usr/local/bin/Rscript /usr/local/bin/dump_to_parquet.R >> /var/log/data-serializer.log 2>&1
+*/10 * * * * nice -n 19 ionice /usr/local/bin/Rscript /usr/local/bin/dump_to_parquet.R >> /var/log/shiny-server/data-serializer.log 2>&1
 # This empty line is crucial for cron to read the last line
 

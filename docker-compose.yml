@@ -23,7 +23,6 @@ services:
     volumes:
       - ./shiny-logs:/var/log/shiny-server/ #Shiny errors
       - ./data-export:/app/data_dumps # Survey data ends up here
-      - ./data-serializer-logs:/var/log/ # For cron job logs
     depends_on:
       - postgresql
     env_file:
