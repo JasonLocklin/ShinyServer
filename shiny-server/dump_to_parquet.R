@@ -3,7 +3,7 @@
 
 # In this demo, they are served by the webserver,
 # but this script could be modified to push the data
-# to annother machine (ftp, webdav, etc).
+# to annother machine.
 
 # Load necessary packages
 library(RPostgres)

@@ -22,7 +22,9 @@ RUN apt-get update && apt-get install -y \
 # `DBI`: Database interface for R.
 # `RPostgres`: PostgreSQL client for R, often used with DBI.
 # `quarto`: For dynamic reporting and document generation.
-RUN R -e "install.packages(c('surveydown', 'DBI', 'RPostgres', 'quarto', 'arrow'), repos='https://cran.rstudio.com/')"
+RUN R -e "install.packages(c('DBI', 'RPostgres', 'quarto', 'arrow', 'pak'), repos='https://cran.rstudio.com/')"
+
+RUN R -e "pak::pak('surveydown-dev/surveydown')"
 
 # Install Quarto CLI.
 # Define the Quarto version and construct the download URL.
@@ -40,7 +42,7 @@ WORKDIR /srv/shiny-server
 # Define a build argument for the Git repository URL.
 # This allows the URL to be passed in during the build process,
 # e.g., using `docker build --build-arg SURVERYDOWN_GIT_URL=your_repo_url .`
-ARG SURVERYDOWN_GIT_URL=https://github.com/surveydown-dev/templates.git
+ARG SURVERYDOWN_GIT_URL=https://github.com/JasonLocklin/surveydown-templates.git
 
 # Clone the specified Git repository into a 'surveydown' directory.
 # Note: If /srv/shiny-server is mounted as a volume from the host,
@@ -50,6 +52,7 @@ RUN git clone ${SURVERYDOWN_GIT_URL} /srv/shiny-server/surveydown
 # Set appropriate ownership for the /srv/shiny-server directory to the 'shiny' user.
 # This ensures that the Shiny server has the necessary permissions to read and write files.
 RUN chown -R shiny:shiny /srv/shiny-server/
+RUN chown -R shiny:shiny /var/log/shiny-server/
 
 # Set up survey data serialization to files
 # Copy the dumping script
@@ -57,9 +60,10 @@ COPY dump_to_parquet.R /usr/local/bin/dump_to_parquet.R
 RUN chmod +x /usr/local/bin/dump_to_parquet.R
 
 # Set up cron job
-COPY crontab /etc/cron.d/data-serializer-cron
-RUN chmod 0644 /etc/cron.d/data-serializer-cron \
-    && crontab /etc/cron.d/data-serializer-cron
+COPY crontab /home/shiny/data-serializer-cron
+RUN chown shiny:shiny /home/shiny/data-serializer-cron
+RUN chmod 0644 /home/shiny/data-serializer-cron \
+    && crontab /home/shiny/data-serializer-cron
 
 # Create a directory for the output files
 RUN mkdir -p /app/data_dumps
@@ -71,6 +75,8 @@ EXPOSE 3838
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 # Make the entrypoint script executable
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+USER shiny
 
 # Set the entrypoint for the container
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

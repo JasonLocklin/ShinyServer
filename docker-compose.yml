@@ -29,7 +29,7 @@ services:
     env_file:
       - .env
     environment:
-      SURVERYDOWN_GIT_URL: "https://github.com/surveydown-dev/templates.git"
+      SURVERYDOWN_GIT_URL: "https://github.com/JasonLocklin/surveydown-templates.git"
     ports:
       - "3838:3838" # use http://localhost:3838 locally for testing
     networks:
