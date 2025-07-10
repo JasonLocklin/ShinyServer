@@ -1,5 +1,6 @@
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-*/10 * * * * nice -n 19 ionice /usr/local/bin/Rscript /usr/local/bin/dump_to_parquet.R >> /var/log/shiny-server/data-serializer.log 2>&1
+*/10 * * * * shiny nice -n 19 ionice /usr/local/bin/Rscript /usr/local/bin/dump_to_parquet.R >> /var/log/shiny-server/data-serializer.log 2>&1
+*/10 * * * * shiny curl -s http://localhost:3838/survey > /dev/null 2>&1 # keep the survey shiny app alive for performance
 # This empty line is crucial for cron to read the last line
 
