@@ -70,6 +70,7 @@ RUN chmod 0644 /etc/cron.d/data-serializer-cron
 
 # Create a directory for the output files
 RUN mkdir -p /app/data_dumps
+RUN chown -R shiny:shiny /app/data_dumps
 
 # Expose port 3838, the default port for Shiny Server.
 EXPOSE 3838
