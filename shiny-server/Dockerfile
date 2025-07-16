@@ -54,11 +54,6 @@ RUN git clone ${SURVERYDOWN_GIT_URL} /srv/shiny-server/survey
 # Note: this is identical to the upstream templates, except set to connect to the database
 RUN git clone https://github.com/JasonLocklin/surveydown-templates.git /srv/shiny-server/templates
 
-# Set appropriate ownership for the /srv/shiny-server directory to the 'shiny' user.
-# This ensures that the Shiny server has the necessary permissions to read and write files.
-RUN chown -R shiny:shiny /srv/
-RUN chown -R shiny:shiny /var/log/shiny-server/
-
 # Set up survey data serialization to files
 # Copy the dumping script
 COPY dump_to_parquet.R /usr/local/bin/dump_to_parquet.R
@@ -70,7 +65,6 @@ RUN chmod 0644 /etc/cron.d/data-serializer-cron
 
 # Create a directory for the output files
 RUN mkdir -p /srv/data_dumps
-RUN chown -R shiny:shiny /srv/ 
 
 # Expose port 3838, the default port for Shiny Server.
 EXPOSE 3838

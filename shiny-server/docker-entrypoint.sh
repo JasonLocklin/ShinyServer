@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+chown -R shiny:shiny /srv
+
 # Write Docker env vars to .Renviron for the shiny user
 cat <<EOF > /home/shiny/.Renviron
 SD_HOST=${SD_HOST}
