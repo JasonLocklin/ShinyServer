@@ -19,6 +19,8 @@ services:
     build:
       context: ./shiny-server
       dockerfile: Dockerfile
+      args:
+        SURVEYDOWN_GIT_URL: "https://github.com/JasonLocklin/survey-demo.git"
     restart: unless-stopped
     volumes:
       - ./shiny-logs:/var/log/shiny-server/ #Shiny errors
@@ -27,8 +29,6 @@ services:
       - postgresql
     env_file:
       - .env
-    environment:
-      SURVERYDOWN_GIT_URL: "https://github.com/JasonLocklin/survey-demo.git"
     ports:
       - "3838:3838" # use http://localhost:3838 locally for testing
     networks:
@@ -48,7 +48,7 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
-      - ./data-export:/var/www/data-export 
+      - ./data-export:/var/www/data-export
     depends_on:
       - shiny_server
     networks:

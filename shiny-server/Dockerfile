@@ -51,7 +51,7 @@ ARG SURVERYDOWN_GIT_URL=https://github.com/JasonLocklin/surveydown-templates.git
 # Clone the specified Git repository into a 'surveydown' directory.
 # Note: If /srv/shiny-server is mounted as a volume from the host,
 # any content cloned here within the Dockerfile will be overwritten by the mount.
-RUN git clone ${SURVERYDOWN_GIT_URL} /srv/shiny-server/survey
+RUN git clone ${SURVEYDOWN_GIT_URL} /srv/shiny-server/survey
 
 # Include a copy of the surveydown templates for troubleshooting/demonstrating
 # Note: this is identical to the upstream templates, except set to connect to the database
