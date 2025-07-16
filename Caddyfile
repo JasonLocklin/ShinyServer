@@ -9,33 +9,6 @@
 
 # Be sure to Change this to your domain!
 shiny.locklin.science {
-    reverse_proxy shiny_server:3838 {
-        header_up Host {host}
-        header_up X-Real-IP {remote}
-        header_up X-Forwarded-For {remote}
-        header_up X-Forwarded-Proto {scheme}
-    }
-    
-    # Production security headers
-    header {
-        # Enable HSTS
-        Strict-Transport-Security "max-age=31536000; includeSubDomains"
-        # Prevent MIME type sniffing
-        X-Content-Type-Options "nosniff"
-        # Prevent clickjacking
-        X-Frame-Options "DENY"
-        # Enable XSS protection
-        X-XSS-Protection "1; mode=block"
-    }
-    
-    # Enable compression
-    encode gzip
-    
-    # Logging
-    log {
-        output file /var/log/caddy/access.log
-        format json
-    }
 
     # IMPORTANT: Replace the demonstration password hash with a hash
     # You can generate a hash using `caddy hash-password --plaintext your_password_here`
@@ -52,5 +25,35 @@ shiny.locklin.science {
             browse
         }
     }
+
+    reverse_proxy shiny_server:3838 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+
+    # Production security headers
+    header {
+        # Enable HSTS
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        # Prevent MIME type sniffing
+        X-Content-Type-Options "nosniff"
+        # Prevent clickjacking
+        X-Frame-Options "DENY"
+        # Enable XSS protection
+        X-XSS-Protection "1; mode=block"
+    }
+
+    # Enable compression
+    encode gzip
+
+    # Logging
+    log {
+        output file /var/log/caddy/access.log
+        format json
+    }
+
+
 
 }
