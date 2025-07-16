@@ -20,7 +20,7 @@ services:
       context: ./shiny-server
       dockerfile: Dockerfile
       args:
-        SURVEYDOWN_GIT_URL: "https://github.com/JasonLocklin/survey-demo.git"
+        SURVEYDOWN_GIT_URL: ${SURVEYDOWN_GIT_URL}
     restart: unless-stopped
     volumes:
       - ./shiny-logs:/var/log/shiny-server/ #Shiny errors
