@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     cron \
     gdebi-core \
     gdal-bin \
+    r-cran-terra \
     && rm -rf /var/lib/apt/lists/*
 
 # Install R packages essential for the application.
