@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     cron \
     gdebi-core \
+    gdal-bin \
     && rm -rf /var/lib/apt/lists/*
 
 # Install R packages essential for the application.
