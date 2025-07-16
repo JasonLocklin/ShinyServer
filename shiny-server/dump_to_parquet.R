@@ -18,7 +18,7 @@ DB_USER <- Sys.getenv("SD_USER")
 DB_PASSWORD <- Sys.getenv("SD_PASSWORD")
 DB_TABLE <- Sys.getenv("SD_TABLE")
 
-OUTPUT_DIR <- "/app/data_dumps"
+OUTPUT_DIR <- "/srv/data_dumps"
 LATEST_FILEPATH <- file.path(OUTPUT_DIR, "responses_latest.parquet")
 
 # Function to exit with a specific status

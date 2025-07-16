@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./shiny-logs:/var/log/shiny-server/ #Shiny errors
-      - ./data-export:/app/data_dumps # Survey data ends up here
+      - ./data-export:/srv/data_dumps # Survey data ends up here
     depends_on:
       - postgresql
     env_file:

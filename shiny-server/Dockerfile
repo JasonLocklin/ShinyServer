@@ -56,7 +56,7 @@ RUN git clone https://github.com/JasonLocklin/surveydown-templates.git /srv/shin
 
 # Set appropriate ownership for the /srv/shiny-server directory to the 'shiny' user.
 # This ensures that the Shiny server has the necessary permissions to read and write files.
-RUN chown -R shiny:shiny /srv/shiny-server/
+RUN chown -R shiny:shiny /srv/
 RUN chown -R shiny:shiny /var/log/shiny-server/
 
 # Set up survey data serialization to files
@@ -69,8 +69,8 @@ COPY crontab /etc/cron.d/data-serializer-cron
 RUN chmod 0644 /etc/cron.d/data-serializer-cron
 
 # Create a directory for the output files
-RUN mkdir -p /app/data_dumps
-RUN chown -R shiny:shiny /app/data_dumps
+RUN mkdir -p /srv/data_dumps
+RUN chown -R shiny:shiny /srv/ 
 
 # Expose port 3838, the default port for Shiny Server.
 EXPOSE 3838
