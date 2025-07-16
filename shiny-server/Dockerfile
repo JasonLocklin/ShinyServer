@@ -46,7 +46,7 @@ WORKDIR /srv/shiny-server
 # Define a build argument for the Git repository URL.
 # This allows the URL to be passed in during the build process,
 # e.g., using `docker build --build-arg SURVERYDOWN_GIT_URL=your_repo_url .`
-ARG SURVERYDOWN_GIT_URL=https://github.com/JasonLocklin/surveydown-templates.git
+ARG SURVEYDOWN_GIT_URL=https://github.com/JasonLocklin/surveydown-templates.git
 
 # Clone the specified Git repository into a 'surveydown' directory.
 # Note: If /srv/shiny-server is mounted as a volume from the host,
