@@ -13,18 +13,21 @@ shiny.locklin.science {
     # IMPORTANT: Replace the demonstration password hash with a hash
     # You can generate a hash using `caddy hash-password --plaintext your_password_here`
     # or use `docker run --rm caddy caddy hash-password --plaintext your_password_here`
+
     @data_dumps_path {
         path /data-export/*
+        path /data-export
     }
     handle @data_dumps_path {
-        basicauth /data-export/* {
-            data $2a$14$.pz9aVYKXX2bdqtIzRINJOTSacvgAsbL6HMLt2Q/bdBTH3UdBfJIO # For demonstrating, this is user "data" and password "defaultpassword" REPLACE THIS!
+        basicauth {
+            data $2a$14$.pz9aVYKXX2bdqtIzRINJOTSacvgAsbL6HMLt2Q/bdBTH3UdBfJIO
         }
         file_server {
-            root /var/www/data-export
+            root /var/www
             browse
         }
     }
+
 
     reverse_proxy shiny_server:3838 {
         header_up Host {host}
