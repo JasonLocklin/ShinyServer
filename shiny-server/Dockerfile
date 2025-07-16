@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     gdebi-core \
     gdal-bin \
     r-cran-terra \
+    r-cran-raster \
     && rm -rf /var/lib/apt/lists/*
 
 # Install R packages essential for the application.
