@@ -55,7 +55,10 @@ RUN git clone ${SURVEYDOWN_GIT_URL} /srv/shiny-server/survey
 
 # Include a copy of the surveydown templates for troubleshooting/demonstrating
 # Note: this is identical to the upstream templates, except set to connect to the database
-RUN git clone https://github.com/JasonLocklin/surveydown-templates.git /srv/shiny-server/templates
+# Uncomment to save template data to the database:
+# RUN git clone https://github.com/JasonLocklin/surveydown-templates.git /srv/shiny-server/templates
+# Uncomment to not save template data to the database:
+RUN git clone https://github.com/surveydown-dev/templates.git /srv/shiny-server/templates
 
 # Set up survey data serialization to files
 # Copy the dumping script
