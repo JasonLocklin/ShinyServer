@@ -2,7 +2,7 @@
 
 This project provides a minimal working example of self-hosting `surveydown` surveys with a self-hosted PostgreSQL database, all orchestrated with Docker Compose. It is designed to be as simple as possible to understand and use for demonstration purposes, local development, and as a starting point for understanding how such a system can be deployed. **It should be used with appropriate security measures if adapting for production environments.**
 
-For more featureful deployment of shiny apps, including surveydown, consider [Shinyproxy](https://www.shinyproxy.io/) and simmilar projects. 
+For more featureful deployment of shiny apps, including surveydown, consider [Shinyproxy](https://www.shinyproxy.io/) and similar projects. 
 
 ## Overview
 
@@ -71,6 +71,7 @@ Several files need to be configured for your specific environment.
         SD_USER=shiny_user
         SD_PASSWORD=my-secure-password-goes-here # CHANGE THIS!
         SD_TABLE=responses
+        SURVEYDOWN_GIT_URL=https://yourgithubsurveyrepo
         ```
       * **Note:** `SD_HOST` is set to `postgresql` because that's the service name of the PostgreSQL container within the Docker network. `SD_PORT` for the application to connect to is the default PostgreSQL port `5432`.
 
@@ -142,29 +143,6 @@ The PostgreSQL database stores the `surveydown` responses.
   * **Data Serializer Logs:** Located in the `data-serializer-logs/` directory on your host. This will contain output from the cron job execution.
   * **Caddy Logs:** Configured to write to `/var/log/caddy/access.log` within the Caddy container, but is not directly volume-mounted to the host in this setup (though you could add a volume mount for it if desired). You can view Caddy logs using `docker-compose logs caddy`.
 
-## Customizing SurveyDown Content
-
-The `shiny_server` Dockerfile is configured to clone a Git repository containing the `surveydown` application files. By default, it uses the `surveydown-dev/templates` repository as an example.
-
-To use your own `surveydown` project:
-
-1.  **Prepare your `surveydown` repository:** Ensure your `surveydown` project (containing `app.R`, `_survey.yml`, etc.) is in a Git repository.
-2.  **Update `Dockerfile` (for `shiny_server`):**
-      * Open `docker-compose.yml`.
-      * Locate the line:
-        ```dockerfile
-        SURVERYDOWN_GIT_URL: "https://github.com/surveydown-dev/templates.git"
-        ```
-      * Change the default URL to your own Git repository URL.
-      * Alternatively, you can pass this as a build argument when deploying:
-        ```bash
-        docker-compose build shiny_server --build-arg SURVERYDOWN_GIT_URL=https://github.com/your-username/your-surveydown-repo.git
-        docker-compose up -d
-        ```
-3.  **Rebuild and Deploy:** After changing the `Dockerfile`, you must rebuild the `shiny_server` image and restart services:
-    ```bash
-    docker-compose up -d --build
-    ```
 
 ## Security Considerations for Production
 
@@ -172,15 +150,8 @@ This setup is a toy example. For production use, consider the following:
 
   * **Strong Passwords:** Use very strong, unique passwords for database credentials and Caddy's basic authentication.
   * **Data Dumps:**
-      * The `/data-downloads/` path offers basic HTTP authentication. For higher security, consider more robust authentication mechanisms or VPN access.
+      * The `/data-export/` path offers basic HTTP authentication. For higher security, consider more robust authentication mechanisms or VPN access.
       * Change the R script to push the data to a secure server rather than saving the files locally.
-
-## Troubleshooting
-
-  * **Check Docker Status:** `docker-compose ps` to see if all containers are running.
-  * **View Logs:** `docker-compose logs <service_name>` (e.g., `docker-compose logs shiny_server`, `docker-compose logs postgresql`, `docker-compose logs caddy`, `docker-compose logs data_serializer`).
-  * **Permissions:** Ensure Docker has necessary permissions to create and write to the `data_dumps/`, `shiny-logs/`, and `data-serializer-logs/` directories on your host.
-  * **Port Conflicts:** Ensure ports 80, 443, and 3838 are not already in use on your host machine.
 
 ## License
 
