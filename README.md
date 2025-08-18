@@ -1,3 +1,5 @@
+Migrated to: [https://codeberg.org/JasonLocklin/surveydown-container-server](https://codeberg.org/JasonLocklin/surveydown-container-server)
+
 # Demonstration of Self-Hosted SurveyDown Deployment with Docker Compose
 
 This project provides a minimal working example of self-hosting `surveydown` surveys with a self-hosted PostgreSQL database, all orchestrated with Docker Compose. It is designed to be as simple as possible to understand and use for demonstration purposes, local development, and as a starting point for understanding how such a system can be deployed. **It should be used with appropriate security measures if adapting for production environments.**
@@ -158,3 +160,4 @@ This setup is a toy example. For production use, consider the following:
 This project is open-source and available under the MIT License.
 
 -----
+
